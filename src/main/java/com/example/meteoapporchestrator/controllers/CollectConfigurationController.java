@@ -1,7 +1,8 @@
 package com.example.meteoapporchestrator.controllers;
 
 import com.example.meteoapporchestrator.business.model.CollectConfigurationDTO;
-import com.example.meteoapporchestrator.business.ICollectConfigurationService;
+import com.example.meteoapporchestrator.business.services.ICollectConfigurationService;
+import com.example.meteoapporchestrator.business.tasks.NotificationTaskPlannerImpl;
 import com.example.meteoapporchestrator.controllers.validators.NotNullId;
 import com.example.meteoapporchestrator.controllers.validators.NullId;
 import jakarta.validation.Valid;
@@ -15,8 +16,14 @@ import java.util.UUID;
 public class CollectConfigurationController {
     private final ICollectConfigurationService collectionConfigurationService;
 
-    public CollectConfigurationController(final ICollectConfigurationService collectionConfigurationService) {
+    private final NotificationTaskPlannerImpl taskPlanner;
+
+    public CollectConfigurationController(
+            final ICollectConfigurationService collectionConfigurationService,
+            final NotificationTaskPlannerImpl taskPlanner
+    ) {
         this.collectionConfigurationService = collectionConfigurationService;
+        this.taskPlanner = taskPlanner;
     }
 
     @GetMapping("/all")
@@ -24,9 +31,14 @@ public class CollectConfigurationController {
         return collectionConfigurationService.getAll();
     }
 
-    @GetMapping("/{Id}")
-    public CollectConfigurationDTO getOne(@PathVariable UUID Id) {
-        return collectionConfigurationService.getOne(Id);
+    @GetMapping("/active")
+    public List<UUID> getAllActiveIds() {
+        return taskPlanner.getAllActiveConfigIds();
+    }
+
+    @GetMapping("/{id}")
+    public CollectConfigurationDTO getOne(@PathVariable UUID id) {
+        return collectionConfigurationService.getOne(id);
     }
 
     @PostMapping

@@ -1,7 +1,7 @@
 package com.example.meteoapporchestrator.persistence.jpa;
 
 import com.example.meteoapporchestrator.business.model.CollectConfigurationDTO;
-import com.example.meteoapporchestrator.business.ICollectConfigurationService;
+import com.example.meteoapporchestrator.business.services.ICollectConfigurationService;
 import com.example.meteoapporchestrator.persistence.jpa.model.CollectConfiguration;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;

@@ -1,4 +1,4 @@
-package com.example.meteoapporchestrator.business;
+package com.example.meteoapporchestrator.business.services;
 
 import com.example.meteoapporchestrator.business.model.CollectConfigurationDTO;
 
