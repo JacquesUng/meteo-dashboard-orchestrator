@@ -1,6 +1,6 @@
-package com.example.meteoapporchestrator.business.tasks;
+package com.example.meteoapporchestrator.business.core.tasks;
 
-import com.example.meteoapporchestrator.business.model.CollectConfigurationDTO;
+import com.example.meteoapporchestrator.business.model.CollectConfiguration;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -23,10 +23,10 @@ public class NotificationTaskPlannerImpl implements INotificationTaskPlanner {
         this.futureMap = new HashMap<>();
     }
 
-    public void createTask(CollectConfigurationDTO dto) {
-        Runnable task = new MessageTask(dto);
-        Future<?> future = taskScheduler.scheduleAtFixedRate(task, dto.startDate(), Duration.of(dto.timespan(), ChronoUnit.HOURS));
-        futureMap.put(dto.Id().toString(), future);
+    public void createTask(CollectConfiguration config) {
+        Runnable task = new MessageTask(config);
+        Future<?> future = taskScheduler.scheduleAtFixedRate(task, config.startDate(), Duration.of(config.timespan(), ChronoUnit.HOURS));
+        futureMap.put(config.Id().toString(), future);
     }
 
     public void cancelTask(UUID configId) {

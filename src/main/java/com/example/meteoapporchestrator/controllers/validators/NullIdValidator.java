@@ -1,15 +1,15 @@
 package com.example.meteoapporchestrator.controllers.validators;
 
-import com.example.meteoapporchestrator.business.model.CollectConfigurationDTO;
+import com.example.meteoapporchestrator.controllers.model.CollectConfigurationDto;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class NullIdValidator implements ConstraintValidator<NullId, CollectConfigurationDTO> {
+public class NullIdValidator implements ConstraintValidator<NullId, CollectConfigurationDto> {
     @Override
     public void initialize(NullId constraintAnnotation) {}
 
     @Override
-    public boolean isValid(CollectConfigurationDTO value, ConstraintValidatorContext context) {
+    public boolean isValid(CollectConfigurationDto value, ConstraintValidatorContext context) {
         if (value == null) {
             return true; // La validation @NotNull est gérée séparément
         }

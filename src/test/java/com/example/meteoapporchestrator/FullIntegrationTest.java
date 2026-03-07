@@ -1,6 +1,6 @@
 package com.example.meteoapporchestrator;
 
-import com.example.meteoapporchestrator.business.model.CollectConfigurationDTO;
+import com.example.meteoapporchestrator.controllers.model.CollectConfigurationDto;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MediaType;
@@ -38,12 +38,12 @@ public class FullIntegrationTest {
 
     @Test
     public void should_retrieveDtoList() throws Exception {
-        CollectConfigurationDTO dto1 = new CollectConfigurationDTO(null,"Config name 1", Instant.parse("2026-02-01T00:00:00.000Z"), 2);
+        CollectConfigurationDto dto1 = new CollectConfigurationDto(null,"Config name 1", Instant.parse("2026-02-01T00:00:00.000Z"), 2);
         String dtoString1 = objectMapper.writeValueAsString(dto1);
         mockMvc.perform(post("/collect-configuration").contentType(MediaType.APPLICATION_JSON.toString()).content(dtoString1))
                 .andExpect(status().isOk());
 
-        CollectConfigurationDTO dto2= new CollectConfigurationDTO(null,"Config name 2", Instant.parse("2026-02-02T00:00:00.000Z"), 1);
+        CollectConfigurationDto dto2= new CollectConfigurationDto(null,"Config name 2", Instant.parse("2026-02-02T00:00:00.000Z"), 1);
         String dtoString2 = objectMapper.writeValueAsString(dto2);
         mockMvc.perform(post("/collect-configuration").contentType(MediaType.APPLICATION_JSON.toString()).content(dtoString2))
                 .andExpect(status().isOk());
@@ -57,7 +57,7 @@ public class FullIntegrationTest {
 
     @Test
     public void should_retrieveOneDto() throws Exception {
-        CollectConfigurationDTO dto = new CollectConfigurationDTO(null,"Config name", Instant.parse("2026-02-01T00:00:00.000Z"), 2);
+        CollectConfigurationDto dto = new CollectConfigurationDto(null,"Config name", Instant.parse("2026-02-01T00:00:00.000Z"), 2);
         String dtoString = objectMapper.writeValueAsString(dto);
         MvcResult result = mockMvc.perform(post("/collect-configuration").contentType(MediaType.APPLICATION_JSON.toString()).content(dtoString))
                 .andExpect(status().isOk()).andReturn();
@@ -74,7 +74,7 @@ public class FullIntegrationTest {
 
     @Test
     public void should_createEntity() throws Exception {
-        CollectConfigurationDTO dto = new CollectConfigurationDTO(null,"Config name", Instant.parse("2026-02-01T00:00:00.000Z"), 2);
+        CollectConfigurationDto dto = new CollectConfigurationDto(null,"Config name", Instant.parse("2026-02-01T00:00:00.000Z"), 2);
         String dtoString = objectMapper.writeValueAsString(dto);
         mockMvc.perform(post("/collect-configuration").contentType(MediaType.APPLICATION_JSON.toString()).content(dtoString))
                 .andExpect(status().isOk())
@@ -100,7 +100,7 @@ public class FullIntegrationTest {
 
     @Test
     public void should_throwException_when_nameIsNull() throws Exception {
-        CollectConfigurationDTO dto = new CollectConfigurationDTO(null,null, Instant.parse("2026-02-01T00:00:00.000Z"), 2);
+        CollectConfigurationDto dto = new CollectConfigurationDto(null,null, Instant.parse("2026-02-01T00:00:00.000Z"), 2);
         String dtoString = objectMapper.writeValueAsString(dto);
         mockMvc.perform(post("/collect-configuration").contentType(MediaType.APPLICATION_JSON.toString()).content(dtoString))
                 .andExpect(status().isBadRequest());

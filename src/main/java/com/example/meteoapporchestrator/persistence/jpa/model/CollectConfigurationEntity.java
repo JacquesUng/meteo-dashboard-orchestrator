@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-public class CollectConfiguration {
+public class CollectConfigurationEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @JdbcTypeCode(SqlTypes.UUID)
@@ -40,9 +40,9 @@ public class CollectConfiguration {
     @Column(nullable = false)
     private long timespan;
 
-    public CollectConfiguration() {}
+    public CollectConfigurationEntity() {}
 
-    public CollectConfiguration(String name, Instant startDate, long timespan) {
+    public CollectConfigurationEntity(String name, Instant startDate, long timespan) {
         this.name = name;
         this.startDate = startDate;
         this.timespan = timespan;

@@ -1,8 +1,9 @@
 package com.example.meteoapporchestrator.controllers;
 
-import com.example.meteoapporchestrator.business.model.CollectConfigurationDTO;
-import com.example.meteoapporchestrator.business.services.ICollectConfigurationService;
-import com.example.meteoapporchestrator.business.tasks.INotificationTaskPlanner;
+import com.example.meteoapporchestrator.business.ports.ICollectConfigurationControllerService;
+import com.example.meteoapporchestrator.business.core.tasks.INotificationTaskPlanner;
+import com.example.meteoapporchestrator.business.ports.INotificationTaskServiceInterface;
+import com.example.meteoapporchestrator.controllers.model.CollectConfigurationDto;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -10,26 +11,26 @@ import java.util.UUID;
 @RestController
 @RequestMapping("task")
 public class TaskController {
-    private final ICollectConfigurationService collectionConfigurationService;
+    private final ICollectConfigurationControllerService collectConfigurationService;
 
-    private final INotificationTaskPlanner taskPlanner;
+    private final INotificationTaskServiceInterface notificationTaskService;
 
     public TaskController(
-            final ICollectConfigurationService collectionConfigurationService,
-            final INotificationTaskPlanner taskPlanner
+            final ICollectConfigurationControllerService collectConfigurationService,
+            final INotificationTaskServiceInterface notificationTaskService
     ) {
-        this.collectionConfigurationService = collectionConfigurationService;
-        this.taskPlanner = taskPlanner;
+        this.collectConfigurationService = collectConfigurationService;
+        this.notificationTaskService = notificationTaskService;
     }
 
     @PostMapping
     public void scheduleTask(@RequestBody String collectConfigId) {
-        CollectConfigurationDTO configDto = collectionConfigurationService.getOne(UUID.fromString(collectConfigId));
-        taskPlanner.createTask(configDto);
+        CollectConfigurationDto configDto = collectConfigurationService.getOne(UUID.fromString(collectConfigId));
+        notificationTaskService.createTask(configDto);
     }
 
     @DeleteMapping("{id}")
     public void deleteTask(@PathVariable String id) {
-        taskPlanner.cancelTask(UUID.fromString(id));
+        notificationTaskService.cancelTask(UUID.fromString(id));
     }
 }

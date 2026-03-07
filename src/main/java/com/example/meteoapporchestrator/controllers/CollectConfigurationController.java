@@ -1,8 +1,8 @@
 package com.example.meteoapporchestrator.controllers;
 
-import com.example.meteoapporchestrator.business.model.CollectConfigurationDTO;
-import com.example.meteoapporchestrator.business.services.ICollectConfigurationService;
-import com.example.meteoapporchestrator.business.tasks.NotificationTaskPlannerImpl;
+import com.example.meteoapporchestrator.business.ports.ICollectConfigurationControllerService;
+import com.example.meteoapporchestrator.business.core.tasks.INotificationTaskPlanner;
+import com.example.meteoapporchestrator.controllers.model.CollectConfigurationDto;
 import com.example.meteoapporchestrator.controllers.validators.NotNullId;
 import com.example.meteoapporchestrator.controllers.validators.NullId;
 import jakarta.validation.Valid;
@@ -14,21 +14,21 @@ import java.util.UUID;
 @RestController()
 @RequestMapping("/collect-configuration")
 public class CollectConfigurationController {
-    private final ICollectConfigurationService collectionConfigurationService;
+    private final ICollectConfigurationControllerService service;
 
-    private final NotificationTaskPlannerImpl taskPlanner;
+    private final INotificationTaskPlanner taskPlanner;
 
     public CollectConfigurationController(
-            final ICollectConfigurationService collectionConfigurationService,
-            final NotificationTaskPlannerImpl taskPlanner
+            final ICollectConfigurationControllerService service,
+            final INotificationTaskPlanner taskPlanner
     ) {
-        this.collectionConfigurationService = collectionConfigurationService;
+        this.service = service;
         this.taskPlanner = taskPlanner;
     }
 
     @GetMapping("/all")
-    public List<CollectConfigurationDTO> getAll() {
-        return collectionConfigurationService.getAll();
+    public List<CollectConfigurationDto> getAll() {
+        return service.getAll();
     }
 
     @GetMapping("/active")
@@ -37,17 +37,17 @@ public class CollectConfigurationController {
     }
 
     @GetMapping("/{id}")
-    public CollectConfigurationDTO getOne(@PathVariable UUID id) {
-        return collectionConfigurationService.getOne(id);
+    public CollectConfigurationDto getOne(@PathVariable UUID id) {
+        return service.getOne(id);
     }
 
     @PostMapping
-    public CollectConfigurationDTO createOne(@RequestBody @Valid @NullId CollectConfigurationDTO dto) {
-        return collectionConfigurationService.save(dto);
+    public CollectConfigurationDto createOne(@RequestBody @Valid @NullId CollectConfigurationDto dto) {
+        return service.save(dto);
     }
 
     @PutMapping
-    public CollectConfigurationDTO updateOne(@RequestBody @Valid @NotNullId CollectConfigurationDTO dto) {
-        return collectionConfigurationService.save(dto);
+    public CollectConfigurationDto updateOne(@RequestBody @Valid @NotNullId CollectConfigurationDto dto) {
+        return service.save(dto);
     }
 }
