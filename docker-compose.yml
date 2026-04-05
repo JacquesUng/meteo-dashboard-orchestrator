@@ -2,7 +2,7 @@ services:
   app:
     image: meteo-app-orchestrator:latest
     ports:
-      - "8080:8080"
+      - "${SPRING_BOOT_PORT}:${SPRING_BOOT_PORT}"
     build:
       context: ./
     environment:
@@ -18,23 +18,8 @@ services:
           action: rebuild
         - path: pom.xml
           action: rebuild
-
-  database:
-    image: postgres:18.3
-    ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
-    healthcheck:
-        test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" ]
-        interval: 5s
-        timeout: 5s
-        retries: 5
-    volumes:
-      - postgres-data:/var/lib/postgresql
-
-
-volumes:
-  postgres-data:
+    labels:
+      traefik.http.routers.backend.rule: Host(`localhost`) && PathPrefix(`/api`)
+      traefik.http.routers.backend.middlewares: strip-api
+      traefik.http.middlewares.strip-api.stripprefix.prefixes: /api
+      traefik.http.services.backend.loadbalancer.server.port: 8081
