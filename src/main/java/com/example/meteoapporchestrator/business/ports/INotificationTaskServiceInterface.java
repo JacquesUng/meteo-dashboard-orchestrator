@@ -5,7 +5,7 @@ import com.example.meteoapporchestrator.controllers.model.CollectConfigurationDt
 import java.util.UUID;
 
 public interface INotificationTaskServiceInterface {
-    void createTask(CollectConfigurationDto dto);
+    void createTask(UUID configId);
 
     void cancelTask(UUID configId);
 }

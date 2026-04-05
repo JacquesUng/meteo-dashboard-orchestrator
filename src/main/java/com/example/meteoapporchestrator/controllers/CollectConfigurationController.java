@@ -3,6 +3,7 @@ package com.example.meteoapporchestrator.controllers;
 import com.example.meteoapporchestrator.business.ports.ICollectConfigurationControllerService;
 import com.example.meteoapporchestrator.business.core.tasks.INotificationTaskPlanner;
 import com.example.meteoapporchestrator.controllers.model.CollectConfigurationDto;
+import com.example.meteoapporchestrator.controllers.model.CollectConfigurationResponseDto;
 import com.example.meteoapporchestrator.controllers.validators.NotNullId;
 import com.example.meteoapporchestrator.controllers.validators.NullId;
 import jakarta.validation.Valid;
@@ -27,7 +28,7 @@ public class CollectConfigurationController {
     }
 
     @GetMapping("/all")
-    public List<CollectConfigurationDto> getAll() {
+    public List<CollectConfigurationResponseDto> getAll() {
         return service.getAll();
     }
 
@@ -37,7 +38,7 @@ public class CollectConfigurationController {
     }
 
     @GetMapping("/{id}")
-    public CollectConfigurationDto getOne(@PathVariable UUID id) {
+    public CollectConfigurationResponseDto getOne(@PathVariable UUID id) {
         return service.getOne(id);
     }
 

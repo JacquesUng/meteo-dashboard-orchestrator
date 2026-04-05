@@ -1,5 +1,6 @@
 package com.example.meteoapporchestrator.business.core.tasks;
 
+import com.example.meteoapporchestrator.business.core.collectconfigs.ICollectConfigurationManager;
 import com.example.meteoapporchestrator.business.model.CollectConfiguration;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Service;
@@ -10,20 +11,29 @@ import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.Future;
 
+import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Service
 public class NotificationTaskPlannerImpl implements INotificationTaskPlanner {
     private final TaskScheduler taskScheduler;
 
+    private final ICollectConfigurationManager collectConfigurationManager;
+
     private final Map<String, Future<?>> futureMap;
 
-    public NotificationTaskPlannerImpl(TaskScheduler taskScheduler) {
+    public NotificationTaskPlannerImpl(TaskScheduler taskScheduler, ICollectConfigurationManager collectConfigurationManager) {
         this.taskScheduler = taskScheduler;
+        this.collectConfigurationManager = collectConfigurationManager;
         this.futureMap = new HashMap<>();
     }
 
-    public void createTask(CollectConfiguration config) {
+    public void createTask(UUID configId) {
+        if (futureMap.containsKey(configId.toString())) {
+            String errorMessage = String.format("Configuration with ID %s has already an associated task currently scheduled", configId);
+            throw new ResponseStatusException(CONFLICT, errorMessage);
+        }
+        CollectConfiguration config = collectConfigurationManager.getOne(configId);
         Runnable task = new MessageTask(config);
         Future<?> future = taskScheduler.scheduleAtFixedRate(task, config.startDate(), Duration.of(config.timespan(), ChronoUnit.HOURS));
         futureMap.put(config.Id().toString(), future);
@@ -36,6 +46,10 @@ public class NotificationTaskPlannerImpl implements INotificationTaskPlanner {
         }
         futureMap.get(configId.toString()).cancel(false);
         futureMap.remove(configId.toString());
+    }
+
+    public boolean isActive(UUID configId) {
+        return futureMap.containsKey(configId.toString());
     }
 
     public List<UUID> getAllActiveConfigIds() {

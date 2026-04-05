@@ -1,9 +1,11 @@
 package com.example.meteoapporchestrator.controllers.adapter;
 
 import com.example.meteoapporchestrator.business.core.collectconfigs.ICollectConfigurationManager;
+import com.example.meteoapporchestrator.business.core.tasks.INotificationTaskPlanner;
 import com.example.meteoapporchestrator.business.model.CollectConfiguration;
 import com.example.meteoapporchestrator.business.ports.ICollectConfigurationControllerService;
 import com.example.meteoapporchestrator.controllers.model.CollectConfigurationDto;
+import com.example.meteoapporchestrator.controllers.model.CollectConfigurationResponseDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,20 +15,30 @@ import java.util.UUID;
 public class CollectConfigurationControllerAdapter implements ICollectConfigurationControllerService {
     private final ICollectConfigurationManager manager;
 
-    public CollectConfigurationControllerAdapter(final ICollectConfigurationManager manager) {
+    private final INotificationTaskPlanner taskPlanner;
+
+    public CollectConfigurationControllerAdapter(
+            final ICollectConfigurationManager manager,
+            final INotificationTaskPlanner taskPlanner
+    ) {
         this.manager = manager;
+        this.taskPlanner = taskPlanner;
     }
 
     @Override
-    public List<CollectConfigurationDto> getAll() {
+    public List<CollectConfigurationResponseDto> getAll() {
         List<CollectConfiguration> configList = manager.getAll();
-        return configList.stream().map(CollectConfigurationControllerMapper::domainToDto).toList();
+        return configList.stream().map(config -> {
+            boolean active = taskPlanner.isActive(config.Id());
+            return CollectConfigurationControllerMapper.domainToResponseDto(config, active);
+        }).toList();
     }
 
     @Override
-    public CollectConfigurationDto getOne(UUID Id) {
+    public CollectConfigurationResponseDto getOne(UUID Id) {
         CollectConfiguration config = manager.getOne(Id);
-        return CollectConfigurationControllerMapper.domainToDto(config);
+        boolean active = taskPlanner.isActive(Id);
+        return CollectConfigurationControllerMapper.domainToResponseDto(config, active);
     }
 
     @Override

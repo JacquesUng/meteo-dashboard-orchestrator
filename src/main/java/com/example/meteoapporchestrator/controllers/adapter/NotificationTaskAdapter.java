@@ -1,9 +1,7 @@
 package com.example.meteoapporchestrator.controllers.adapter;
 
 import com.example.meteoapporchestrator.business.core.tasks.INotificationTaskPlanner;
-import com.example.meteoapporchestrator.business.model.CollectConfiguration;
 import com.example.meteoapporchestrator.business.ports.INotificationTaskServiceInterface;
-import com.example.meteoapporchestrator.controllers.model.CollectConfigurationDto;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -17,9 +15,8 @@ public class NotificationTaskAdapter implements INotificationTaskServiceInterfac
     }
 
     @Override
-    public void createTask(CollectConfigurationDto dto) {
-        CollectConfiguration config = CollectConfigurationControllerMapper.dtoToDomain(dto);
-        taskPlanner.createTask(config);
+    public void createTask(UUID configId) {
+        taskPlanner.createTask(configId);
     }
 
     @Override
