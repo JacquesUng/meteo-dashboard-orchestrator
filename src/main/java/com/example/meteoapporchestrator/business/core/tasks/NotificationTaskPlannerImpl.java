@@ -28,6 +28,7 @@ public class NotificationTaskPlannerImpl implements INotificationTaskPlanner {
         this.futureMap = new HashMap<>();
     }
 
+    @Override
     public void createTask(UUID configId) {
         if (futureMap.containsKey(configId.toString())) {
             String errorMessage = String.format("Configuration with ID %s has already an associated task currently scheduled", configId);
@@ -39,6 +40,7 @@ public class NotificationTaskPlannerImpl implements INotificationTaskPlanner {
         futureMap.put(config.Id().toString(), future);
     }
 
+    @Override
     public void cancelTask(UUID configId) {
         if (!futureMap.containsKey(configId.toString())) {
             String errorMessage = String.format("Configuration with ID %s has no associated task currently scheduled", configId);
@@ -48,10 +50,12 @@ public class NotificationTaskPlannerImpl implements INotificationTaskPlanner {
         futureMap.remove(configId.toString());
     }
 
+    @Override
     public boolean isActive(UUID configId) {
         return futureMap.containsKey(configId.toString());
     }
 
+    @Override
     public List<UUID> getAllActiveConfigIds() {
         return futureMap.keySet().stream().map(UUID::fromString).toList();
     }

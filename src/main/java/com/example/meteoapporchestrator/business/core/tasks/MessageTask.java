@@ -17,6 +17,7 @@ public class MessageTask implements Runnable {
         this.config = config;
     }
 
+    @Override
     public void run() {
         System.out.println("Running " + config.name());
     }

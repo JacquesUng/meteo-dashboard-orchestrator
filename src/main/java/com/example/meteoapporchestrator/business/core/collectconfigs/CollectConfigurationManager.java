@@ -15,14 +15,17 @@ public class CollectConfigurationManager implements ICollectConfigurationManager
         this.persistenceService = persistenceService;
     }
 
+    @Override
     public List<CollectConfiguration> getAll() {
         return persistenceService.getAll();
     }
 
+    @Override
     public CollectConfiguration getOne(UUID Id) {
         return persistenceService.getOne(Id);
     }
 
+    @Override
     public CollectConfiguration save(CollectConfiguration config) {
         return persistenceService.save(config);
     }

@@ -20,11 +20,13 @@ public class CollectConfigurationJpaAdapter implements ICollectConfigurationPers
         this.repository = repository;
     }
 
+    @Override
     public List<CollectConfiguration> getAll() {
         List<CollectConfigurationEntity> collectConfigurationEntityList = repository.findAll();
         return collectConfigurationEntityList.stream().map(CollectConfigurationPersistenceMapper::entityToDomain).toList();
     }
 
+    @Override
     public CollectConfiguration getOne(UUID Id) {
         Optional<CollectConfigurationEntity> entity = repository.findById(Id);
         if (entity.isEmpty()) {
@@ -33,6 +35,7 @@ public class CollectConfigurationJpaAdapter implements ICollectConfigurationPers
         return CollectConfigurationPersistenceMapper.entityToDomain(entity.get());
     }
 
+    @Override
     public CollectConfiguration save(CollectConfiguration config) {
         CollectConfigurationEntity entity = repository.save(CollectConfigurationPersistenceMapper.domainToEntity(config));
         return CollectConfigurationPersistenceMapper.entityToDomain(entity);
