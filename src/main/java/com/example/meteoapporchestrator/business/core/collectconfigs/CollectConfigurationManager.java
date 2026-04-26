@@ -29,4 +29,9 @@ public class CollectConfigurationManager implements ICollectConfigurationManager
     public CollectConfiguration save(CollectConfiguration config) {
         return persistenceService.save(config);
     }
+
+    @Override
+    public void deleteOne(UUID Id) {
+        persistenceService.delete(Id);
+    }
 }

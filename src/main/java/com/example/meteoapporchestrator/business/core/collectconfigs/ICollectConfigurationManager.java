@@ -11,4 +11,6 @@ public interface ICollectConfigurationManager {
     CollectConfiguration getOne(UUID Id);
 
     CollectConfiguration save(CollectConfiguration config);
+
+    void deleteOne(UUID Id);
 }

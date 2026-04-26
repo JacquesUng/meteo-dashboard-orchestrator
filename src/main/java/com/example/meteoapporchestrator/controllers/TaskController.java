@@ -1,6 +1,7 @@
 package com.example.meteoapporchestrator.controllers;
 
 import com.example.meteoapporchestrator.business.ports.INotificationTaskServiceInterface;
+import com.example.meteoapporchestrator.controllers.model.ScheduleTaskRequestDto;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -17,8 +18,8 @@ public class TaskController {
     }
 
     @PostMapping
-    public void scheduleTask(@RequestBody String collectConfigId) {
-        notificationTaskService.createTask(UUID.fromString(collectConfigId));
+    public void scheduleTask(@RequestBody ScheduleTaskRequestDto request) {
+        notificationTaskService.createTask(request.collectConfigId());
     }
 
     @DeleteMapping("/{configId}")

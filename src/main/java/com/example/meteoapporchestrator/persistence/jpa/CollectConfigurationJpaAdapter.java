@@ -40,4 +40,9 @@ public class CollectConfigurationJpaAdapter implements ICollectConfigurationPers
         CollectConfigurationEntity entity = repository.save(CollectConfigurationPersistenceMapper.domainToEntity(config));
         return CollectConfigurationPersistenceMapper.entityToDomain(entity);
     }
+
+    @Override
+    public void delete(UUID Id) {
+        repository.deleteById(Id);
+    }
 }

@@ -51,4 +51,9 @@ public class CollectConfigurationController {
     public CollectConfigurationDto updateOne(@RequestBody @Valid @NotNullId CollectConfigurationDto dto) {
         return service.save(dto);
     }
+
+    @DeleteMapping("/{id}")
+    public void deleteOne(@PathVariable UUID id) {
+        service.deleteOne(id);
+    }
 }

@@ -126,4 +126,19 @@ public class FullIntegrationTest {
         mockMvc.perform(post("/collect-configuration").contentType(MediaType.APPLICATION_JSON.toString()).content(dtoString))
                 .andExpect(status().isBadRequest());
     }
+
+    @Test
+    public void should_deleteEntity() throws Exception {
+        CollectConfigurationDto dto = new CollectConfigurationDto(null, "Config name", Instant.parse("2026-02-01T00:00:00.000Z"), 2);
+        String dtoString = objectMapper.writeValueAsString(dto);
+        MvcResult result = mockMvc.perform(post("/collect-configuration").contentType(MediaType.APPLICATION_JSON.toString()).content(dtoString))
+                .andExpect(status().isOk()).andReturn();
+        String createdId = objectMapper.readTree(result.getResponse().getContentAsString()).get("Id").asString();
+
+        mockMvc.perform(delete(String.format("/collect-configuration/%s", createdId)))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get(String.format("/collect-configuration/%s", createdId)))
+                .andExpect(status().isNotFound());
+    }
 }

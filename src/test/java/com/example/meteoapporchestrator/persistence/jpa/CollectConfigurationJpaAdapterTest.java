@@ -78,7 +78,7 @@ public class CollectConfigurationJpaAdapterTest {
         Mockito.when(repository.findById(Mockito.any())).thenReturn(Optional.empty());
         Assertions.assertThrows(
                 ResponseStatusException.class,
-                () -> adapter.getOne(UUID.fromString("732f8381-9783-4c46-9978-56ab0d8f7c8b")))
-        ;
+                () -> adapter.getOne(UUID.fromString("732f8381-9783-4c46-9978-56ab0d8f7c8b"))
+        );
     }
 }

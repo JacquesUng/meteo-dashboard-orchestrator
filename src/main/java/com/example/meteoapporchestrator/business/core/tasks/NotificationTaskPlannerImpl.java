@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Duration;
+import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.concurrent.Future;
@@ -36,7 +37,8 @@ public class NotificationTaskPlannerImpl implements INotificationTaskPlanner {
         }
         CollectConfiguration config = collectConfigurationManager.getOne(configId);
         Runnable task = new MessageTask(config);
-        Future<?> future = taskScheduler.scheduleAtFixedRate(task, config.startDate(), Duration.of(config.timespan(), ChronoUnit.HOURS));
+        Instant startDate = config.startDate() == null ? Instant.now() : config.startDate();
+        Future<?> future = taskScheduler.scheduleAtFixedRate(task, startDate, Duration.of(config.timespan(), ChronoUnit.HOURS));
         futureMap.put(config.Id().toString(), future);
     }
 

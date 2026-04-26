@@ -47,4 +47,9 @@ public class CollectConfigurationControllerAdapter implements ICollectConfigurat
         CollectConfiguration savedConfig = manager.save(config);
         return CollectConfigurationControllerMapper.domainToDto(savedConfig);
     }
+
+    @Override
+    public void deleteOne(UUID Id) {
+        manager.deleteOne(Id);
+    }
 }

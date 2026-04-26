@@ -12,4 +12,6 @@ public interface ICollectConfigurationControllerService {
     CollectConfigurationResponseDto getOne(UUID Id);
 
     CollectConfigurationDto save(CollectConfigurationDto dto);
+
+    void deleteOne(UUID Id);
 }
