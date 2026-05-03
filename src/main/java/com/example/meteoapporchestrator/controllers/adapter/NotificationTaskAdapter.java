@@ -4,6 +4,7 @@ import com.example.meteoapporchestrator.business.core.tasks.INotificationTaskPla
 import com.example.meteoapporchestrator.business.ports.INotificationTaskServiceInterface;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -22,5 +23,15 @@ public class NotificationTaskAdapter implements INotificationTaskServiceInterfac
     @Override
     public void cancelTask(UUID configId) {
         taskPlanner.cancelTask(configId);
+    }
+
+    @Override
+    public boolean isActive(UUID configId) {
+        return taskPlanner.isActive(configId);
+    }
+
+    @Override
+    public List<UUID> getAllActiveConfigIds() {
+        return taskPlanner.getAllActiveConfigIds();
     }
 }

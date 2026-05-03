@@ -1,7 +1,6 @@
 package com.example.meteoapporchestrator.controllers.adapter;
 
 import com.example.meteoapporchestrator.business.core.collectconfigs.ICollectConfigurationManager;
-import com.example.meteoapporchestrator.business.core.tasks.INotificationTaskPlanner;
 import com.example.meteoapporchestrator.business.model.CollectConfiguration;
 import com.example.meteoapporchestrator.business.ports.ICollectConfigurationControllerService;
 import com.example.meteoapporchestrator.controllers.model.CollectConfigurationDto;
@@ -15,21 +14,21 @@ import java.util.UUID;
 public class CollectConfigurationControllerAdapter implements ICollectConfigurationControllerService {
     private final ICollectConfigurationManager manager;
 
-    private final INotificationTaskPlanner taskPlanner;
+    private final NotificationTaskAdapter notificationTaskAdapter;
 
     public CollectConfigurationControllerAdapter(
             final ICollectConfigurationManager manager,
-            final INotificationTaskPlanner taskPlanner
+            final NotificationTaskAdapter notificationTaskAdapter
     ) {
         this.manager = manager;
-        this.taskPlanner = taskPlanner;
+        this.notificationTaskAdapter = notificationTaskAdapter;
     }
 
     @Override
     public List<CollectConfigurationResponseDto> getAll() {
         List<CollectConfiguration> configList = manager.getAll();
         return configList.stream().map(config -> {
-            boolean active = taskPlanner.isActive(config.Id());
+            boolean active = notificationTaskAdapter.isActive(config.Id());
             return CollectConfigurationControllerMapper.domainToResponseDto(config, active);
         }).toList();
     }
@@ -37,7 +36,7 @@ public class CollectConfigurationControllerAdapter implements ICollectConfigurat
     @Override
     public CollectConfigurationResponseDto getOne(UUID Id) {
         CollectConfiguration config = manager.getOne(Id);
-        boolean active = taskPlanner.isActive(Id);
+        boolean active = notificationTaskAdapter.isActive(Id);
         return CollectConfigurationControllerMapper.domainToResponseDto(config, active);
     }
 

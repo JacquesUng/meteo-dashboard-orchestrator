@@ -1,7 +1,7 @@
 package com.example.meteoapporchestrator.controllers;
 
 import com.example.meteoapporchestrator.business.ports.ICollectConfigurationControllerService;
-import com.example.meteoapporchestrator.business.core.tasks.INotificationTaskPlanner;
+import com.example.meteoapporchestrator.controllers.adapter.NotificationTaskAdapter;
 import com.example.meteoapporchestrator.controllers.model.CollectConfigurationDto;
 import com.example.meteoapporchestrator.controllers.model.CollectConfigurationResponseDto;
 import com.example.meteoapporchestrator.controllers.validators.NotNullId;
@@ -17,14 +17,14 @@ import java.util.UUID;
 public class CollectConfigurationController {
     private final ICollectConfigurationControllerService service;
 
-    private final INotificationTaskPlanner taskPlanner;
+    private final NotificationTaskAdapter notificationTaskAdapter;
 
     public CollectConfigurationController(
             final ICollectConfigurationControllerService service,
-            final INotificationTaskPlanner taskPlanner
+            final NotificationTaskAdapter notificationTaskAdapter
     ) {
         this.service = service;
-        this.taskPlanner = taskPlanner;
+        this.notificationTaskAdapter = notificationTaskAdapter;
     }
 
     @GetMapping("/all")
@@ -34,7 +34,7 @@ public class CollectConfigurationController {
 
     @GetMapping("/active")
     public List<UUID> getAllActiveIds() {
-        return taskPlanner.getAllActiveConfigIds();
+        return notificationTaskAdapter.getAllActiveConfigIds();
     }
 
     @GetMapping("/{id}")
